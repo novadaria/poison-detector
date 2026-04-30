@@ -10,7 +10,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, roc_auc_score
 from sklearn.model_selection import train_test_split
-from sqlalchemy import create_engine   # <--- добавлен импорт
+from sqlalchemy import create_engine
 
 class ExperimentRunner:
 
@@ -86,12 +86,10 @@ class ExperimentRunner:
                 "roc_auc": runs[:, 6].mean()
             })
 
-        # --- СОХРАНЕНИЕ В SQLite ---
+        # --  СОХРАНЕНИЕ В SQLite
         db_path = 'experiments.db'
         engine = create_engine(f'sqlite:///{db_path}', echo=False)
         df = pd.DataFrame(results)
         df.to_sql('experiment_results', con=engine, if_exists='append', index=False)
-        print(f"Результаты сохранены в базу данных: {db_path}, таблица experiment_results")
-        # -------------------------
 
         return pd.DataFrame(results)
